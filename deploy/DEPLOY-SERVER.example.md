@@ -28,6 +28,29 @@ sudo certbot --nginx -d agentshieldtop.xyz -d www.agentshieldtop.xyz
 
 ## 日常更新
 
+国内阿里云服务器**通常无法直连** `github.com:443`，`git pull` 会超时。任选其一：
+
+### 方式 A：本机 rsync 同步（最稳，推荐）
+
+在**能访问 GitHub 的电脑**上（已 git pull 最新代码）：
+
+```bash
+cd /path/to/agentShield
+bash deploy/sync-to-server.sh root@你的服务器IP
+```
+
+### 方式 B：服务器 SSH 走 443 拉取
+
+在服务器生成密钥并添加到 GitHub SSH keys 后：
+
+```bash
+cd /opt/agentshield
+bash deploy/pull-china.sh
+sudo bash deploy/deploy.sh
+```
+
+### 方式 C：HTTPS（仅当服务器能访问 GitHub 时）
+
 ```bash
 cd /opt/agentshield
 git pull
