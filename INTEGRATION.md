@@ -1,23 +1,23 @@
 # AgentShield 即插即用集成指南
 
-> **在线演示**：<https://agentshieldtop.xyz>（登录后打开「快速集成 → 在线试集成」）  
+> **在线演示**：<http://114.215.209.144:8088>（登录后打开「快速集成 → 在线试集成」）  
 > **开源仓库**：<https://github.com/kkangtai9607/agentShield>  
-> **普通用户 / 评委**：不必先部署网关，直接访问线上站点即可体验。  
+> **普通用户 / 评委**：浏览器打开线上地址即可体验，无需本地部署。  
 > **开发者**：`git clone` 后 `from app.integration import evaluate`，3 行嵌入，无需 uvicorn。
 
 ## 三种方式怎么选？
 
 | 方式 | 是否需要部署 | 适合谁 | 入口 |
 |------|-------------|--------|------|
-| **在线体验** | 否 | 评委、产品体验 | <https://agentshieldtop.xyz/integration-guide> |
+| **在线体验** | 否 | 评委、产品体验 | <http://114.215.209.144:8088/integration-guide> |
 | **嵌入模式** | 否（import 即用） | Python Agent 开发者 | `git clone` → `from app.integration import evaluate` |
-| **HTTP 网关** | 可选（已提供线上实例） | 多语言 / 远程 Agent | `POST https://agentshieldtop.xyz/api/shield/evaluate` |
+| **HTTP 网关** | 可选（已提供线上实例） | 多语言 / 远程 Agent | `POST http://114.215.209.144:8088/api/shield/evaluate` |
 
 ---
 
 ## 方式一：在线体验（0 配置）
 
-1. 浏览器打开 **https://agentshieldtop.xyz**
+1. 浏览器打开 **http://114.215.209.144:8088**
 2. 使用演示账号登录（校园场景：`student01` / `student123`）
 3. 侧栏进入 **快速集成**，在「在线试集成」中选择角色、工具、参数，点击 **立即评估**
 4. 查看 `execute_allowed` 与决策原因 —— 与正式集成 API 完全一致
@@ -60,14 +60,11 @@ if r["execute_allowed"]:
 ```bash
 cd agentShield/backend
 
-# 检查一次调用
 PYTHONPATH=. python -m app.integration.cli check \
   --role student --tool read_file --args '{"path":"secret.txt"}'
 
-# 生成 my_policy.yaml + 示例脚本
 PYTHONPATH=. python -m app.integration.cli init ./my_project
 
-# 内置演示
 PYTHONPATH=. python -m app.integration.cli demo
 ```
 
@@ -90,16 +87,14 @@ def my_search(query: str) -> str:
 
 ## 方式三：HTTP 网关（可选）
 
-线上已部署实例，Agent 与 AgentShield 分离时可直接调用：
+线上已部署实例：
 
 ```
-POST https://agentshieldtop.xyz/api/shield/evaluate
+POST http://114.215.209.144:8088/api/shield/evaluate
 ```
-
-若你自行部署控制台，请使用**当前站点同源地址**（浏览器打开控制台即 `/api`），勿硬编码 `localhost`。
 
 ```bash
-ORIGIN=https://agentshieldtop.xyz
+ORIGIN=http://114.215.209.144:8088
 
 TOKEN=$(curl -s -X POST "$ORIGIN/api/auth/login" \
   -H 'Content-Type: application/json' \
@@ -116,14 +111,14 @@ curl -s -X POST "$ORIGIN/api/shield/evaluate" \
   }'
 ```
 
-健康检查：`GET https://agentshieldtop.xyz/health`
+健康检查：`GET http://114.215.209.144:8088/health`
 
 Python HTTP SDK：
 
 ```python
 from app.integration.sdk import ShieldClient
 
-client = ShieldClient("https://agentshieldtop.xyz", token="...")
+client = ShieldClient("http://114.215.209.144:8088", token="...")
 res = client.evaluate(user_role="operator", tool_name="query_db", tool_args={"sql": "..."})
 if client.should_execute(res):
     run_your_real_tool()
@@ -135,18 +130,10 @@ if client.should_execute(res):
 
 ```bash
 cp config/user_policy.template.yaml config/my_policy.yaml
-# 编辑 role_permissions：身份 × 工具 → allow / deny / confirm
 ```
 
 嵌入：`configure(policy_file="./config/my_policy.yaml")`  
 HTTP 部署：`.env` 中 `POLICY_FILE=./config/my_policy.yaml`
-
-| 字段 | 作用 |
-|------|------|
-| `role_permissions` | 身份 × 工具 → allow / deny / confirm |
-| `decision_thresholds` | 风险分 → allow/mask/confirm/block |
-
-**工具名按你的业务自定义**，不必与 demo 工具一致。
 
 ---
 
@@ -155,22 +142,20 @@ HTTP 部署：`.env` 中 `POLICY_FILE=./config/my_policy.yaml`
 - `profiles/campus|personal|enterprise`：竞赛演示切换
 - `POLICY_FILE` / 嵌入 `configure(policy_file=...)`：真实用户即插即用
 
-答辩话术：**线上站点 + 在线试集成给评委零配置体验；开发者 git clone 用嵌入模式；团队落地用 POLICY_FILE 或 HTTP evaluate。**
+答辩话术：**线上 http://114.215.209.144:8088 零配置体验；开发者 git clone 嵌入；团队落地用 POLICY_FILE 或 HTTP evaluate。**
 
 ---
 
 ## LangChain / MCP / 主流 Agent
 
 - **Cursor / Claude Desktop / Trae**：MCP stdio → `python -m app.agents.mcp_server`（详见 [INTEGRATION-AGENTS.md](./INTEGRATION-AGENTS.md)）
-- **Claude API / OpenAI Codex**：在 `tool_use` / `tool_calls` 循环里调 HTTP evaluate 或 embed
-- **LangChain**：`app/agents/langchain_tools.py` → `execute_via_shield`
-
-完整主流 Agent 接入指南：**[INTEGRATION-AGENTS.md](./INTEGRATION-AGENTS.md)**
+- **Claude API / OpenAI Codex**：在 tool 循环里调 HTTP evaluate 或 embed
 
 ---
 
 ## 源码与部署
 
 - 源码：<https://github.com/kkangtai9607/agentShield>
-- 自行部署：见仓库内 `deploy/DEPLOY.md`
-- 服务器更新：`git pull && sudo bash deploy/deploy.sh`
+- IP 演示部署：[deploy/IP-PORT-ACCESS.md](./deploy/IP-PORT-ACCESS.md)
+- 域名部署（备案后）：[deploy/DEPLOY.md](./deploy/DEPLOY.md)
+- 服务器更新：`bash deploy/sync-to-server.sh root@114.215.209.144`

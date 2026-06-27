@@ -32,13 +32,11 @@ _cors_origins = [o.strip() for o in _settings.CORS_ORIGINS.split(",") if o.strip
 if _cors_origins:
     _cors_kwargs["allow_origins"] = _cors_origins
 elif _settings.ALLOW_LAN:
-    # 允许 localhost 与常见局域网 IP 访问（答辩/多人演示）
+    # 允许 localhost、局域网 IP、公网 IP:端口 演示（如 http://114.215.209.144:8088）
     _cors_kwargs["allow_origin_regex"] = (
         r"https?://("
         r"localhost|127\.0\.0\.1"
-        r"|192\.168\.\d{1,3}\.\d{1,3}"
-        r"|10\.\d{1,3}\.\d{1,3}\.\d{1,3}"
-        r"|172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}"
+        r"|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
         r")(:\d+)?"
     )
 else:

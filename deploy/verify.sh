@@ -5,7 +5,8 @@
 set -euo pipefail
 
 APP_ROOT="${APP_ROOT:-/opt/agentshield}"
-DOMAIN="${DOMAIN:-agentshieldtop.xyz}"
+DOMAIN="${DOMAIN:-114.215.209.144}"
+DEMO_PORT="${DEMO_PORT:-8088}"
 BACKEND_PORT="${BACKEND_PORT:-8001}"
 
 ok=0
@@ -73,4 +74,4 @@ fi
 
 echo ""
 echo "通过 ${ok} 项，失败/警告 ${fail} 项"
-[[ "${fail}" -eq 0 ]] && echo "可以对外演示: https://${DOMAIN}" || echo "请按 deploy/DEPLOY.md 补齐后再上线"
+[[ "${fail}" -eq 0 ]] && echo "可以对外演示: http://${DOMAIN}:${DEMO_PORT}" || echo "请按 deploy/IP-PORT-ACCESS.md 补齐后再上线"

@@ -74,8 +74,8 @@ PYTHONPATH=. python -m app.integration.cli check \\
 
 ## 可选：HTTP 网关
 
-线上演示：https://agentshieldtop.xyz →「快速集成 → 在线试集成」
-或 POST https://agentshieldtop.xyz/api/shield/evaluate
+线上演示：http://114.215.209.144:8088 →「快速集成 → 在线试集成」
+或 POST http://114.215.209.144:8088/api/shield/evaluate
 开源仓库：https://github.com/kkangtai9607/agentShield
 """
 

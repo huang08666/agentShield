@@ -54,6 +54,13 @@ systemctl daemon-reload
 systemctl enable "${SERVICE_NAME}"
 systemctl restart "${SERVICE_NAME}"
 
+echo "==> ACME webroot（certbot 用）"
+mkdir -p /var/www/certbot/.well-known/acme-challenge
+chmod -R 755 /var/www/certbot
+
+echo "==> nginx upstream（全局一份）"
+cp "${APP_ROOT}/deploy/nginx/agentshield-upstream.conf" /etc/nginx/conf.d/agentshield-upstream.conf
+
 echo "==> nginx 配置"
 NGINX_DST="/etc/nginx/sites-available/agentshieldtop.xyz.conf"
 if [ -f /etc/letsencrypt/live/agentshieldtop.xyz/fullchain.pem ]; then
@@ -71,10 +78,21 @@ else
   echo "WARN: nginx -t 失败，请检查 ${NGINX_DST}"
 fi
 
+# 可选：公网 IP:8088 演示入口（无域名场景）
+IP_PORT_CONF="${APP_ROOT}/deploy/nginx/agentshield-ip-8088.conf"
+if [ -f "${IP_PORT_CONF}" ]; then
+  cp "${IP_PORT_CONF}" /etc/nginx/sites-available/agentshield-ip-8088.conf
+  ln -sf /etc/nginx/sites-available/agentshield-ip-8088.conf /etc/nginx/sites-enabled/agentshield-ip-8088.conf
+  if nginx -t; then
+    systemctl reload nginx
+    echo "    已启用 IP:8088 演示入口 http://<公网IP>:8088"
+  fi
+fi
+
 echo ""
 echo "部署完成。检查:"
 echo "  systemctl status ${SERVICE_NAME}"
 echo "  curl -s http://127.0.0.1:8001/health"
-echo "  浏览器访问 https://agentshieldtop.xyz"
+echo "  浏览器访问 http://114.215.209.144:8088"
 echo ""
 echo "演示账号: student01/student123  teacher01/teacher123  admin01/admin123"

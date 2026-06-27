@@ -9,7 +9,7 @@ from docx.oxml.ns import qn
 from docx.shared import Pt, Cm
 
 OUTPUT = Path(__file__).resolve().parents[1] / "作品报告_AgentShield.docx"
-LIVE_SITE = "https://agentshieldtop.xyz"
+LIVE_SITE = "http://114.215.209.144:8088"
 GITHUB_REPO = "https://github.com/kkangtai9607/agentShield"
 
 BODY_FONT = "宋体"
@@ -254,7 +254,7 @@ def build_document():
     add_bullet(doc, "数据库：SQLite 全链路审计，记录风险分、决策、原因与结果预览。")
     add_bullet(doc, "Benchmark 平均评估延迟：约 2.1 ms/条（本地 campus 策略实测）。")
     add_bullet(doc, "自动化测试：51 条 pytest 用例覆盖策略、绕过、confirm、语义、鉴权等。")
-    add_bullet(doc, f"生产部署：nginx + systemd，域名 {LIVE_SITE}，后端 127.0.0.1:8001 仅本机反代。")
+    add_bullet(doc, f"生产部署：nginx + systemd，演示地址 {LIVE_SITE}，后端 127.0.0.1:8001 仅本机反代。")
     add_bullet(doc, f"开源仓库：{GITHUB_REPO}，含 INTEGRATION.md、INTEGRATION-AGENTS.md 与 deploy 脚本。")
     doc.add_page_break()
 
@@ -272,7 +272,7 @@ def build_document():
     add_heading(doc, "3.2 测试环境", level=2)
     add_bullet(doc, "操作系统：Linux；Python 3.11；Node.js 18+。")
     add_bullet(doc, "本地开发：FastAPI + Uvicorn + Vite 开发服务器。")
-    add_bullet(doc, f"线上环境：阿里云轻量服务器，HTTPS 站点 {LIVE_SITE}，nginx 反代 + Let's Encrypt。")
+    add_bullet(doc, f"线上环境：阿里云轻量服务器，演示入口 {LIVE_SITE}（nginx :8088 反代 + 后端 127.0.0.1:8001）。")
     add_bullet(doc, "后端：FastAPI + Uvicorn（生产单 worker），默认 USE_MOCK_LLM=true。")
     add_bullet(doc, "数据库：SQLite 本地文件 agentshield.db。")
     add_heading(doc, "3.3 Benchmark 结果", level=2)

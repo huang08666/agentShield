@@ -1,0 +1,25 @@
+AgentShield Online Demo
+=======================
+
+Live site:  http://114.215.209.144:8088
+Health:     http://114.215.209.144:8088/health
+GitHub:     https://github.com/kkangtai9607/agentShield
+
+Demo accounts (campus profile):
+  student01   / student123   (student)
+  teacher01   / teacher123   (teacher)
+  admin01     / admin123     (admin)
+
+Personal profile:
+  owner01 / owner123
+  guest01 / guest123
+
+Enterprise profile:
+  agent01       / agent123
+  supervisor01  / supervisor123
+
+Suggested demo flow for judges:
+1. Open http://114.215.209.144:8088
+2. Login with student01
+3. Quick Integration -> online evaluate
+4. Attack Scenarios -> run built-in demos

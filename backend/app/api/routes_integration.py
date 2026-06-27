@@ -55,9 +55,9 @@ def integration_guide(current_user: TokenUser = Depends(get_current_user)):
             IntegrationMode(
                 id="online",
                 name="在线体验（零配置）",
-                description="访问 https://agentshieldtop.xyz → 快速集成 → 在线试集成，登录即用。",
+                description="访问 http://114.215.209.144:8088 → 快速集成 → 在线试集成，登录即用。",
                 steps=[
-                    "打开 https://agentshieldtop.xyz 并登录演示账号",
+                    "打开 http://114.215.209.144:8088 并登录演示账号",
                     "填写角色、工具名、参数",
                     "点击立即评估，查看 execute_allowed",
                 ],
@@ -84,7 +84,7 @@ def integration_guide(current_user: TokenUser = Depends(get_current_user)):
             IntegrationMode(
                 id="http",
                 name="HTTP API（可选）",
-                description="POST https://agentshieldtop.xyz/api/shield/evaluate（或自建同源地址）",
+                description="POST http://114.215.209.144:8088/api/shield/evaluate（或自建同源地址）",
                 steps=[
                     "登录获取 JWT",
                     "POST /api/shield/evaluate",
@@ -132,12 +132,12 @@ def integration_guide(current_user: TokenUser = Depends(get_current_user)):
         agentshield_config_example_path="config/agentshield.yaml.example",
         evaluate_endpoint="/api/shield/evaluate",
         quick_start=[
-            "评委：打开 https://agentshieldtop.xyz → 快速集成 → 在线试集成",
+            "评委：打开 http://114.215.209.144:8088 → 快速集成 → 在线试集成",
             "Cursor/Claude/Trae：配置 MCP → python -m app.agents.mcp_server（见 INTEGRATION-AGENTS.md）",
-            "Claude API/Codex：tool 循环内 POST /api/shield/evaluate",
+            "Claude API/Codex：tool 循环内 POST http://114.215.209.144:8088/api/shield/evaluate",
             "Python：git clone → from app.integration import evaluate",
         ],
-        live_site_url="https://agentshieldtop.xyz",
+        live_site_url="http://114.215.209.144:8088",
         github_repo_url="https://github.com/kkangtai9607/agentShield",
     )
 

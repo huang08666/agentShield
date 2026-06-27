@@ -1,6 +1,6 @@
 # 主流 Agent 工具调用集成指南
 
-> **在线演示**：<https://agentshieldtop.xyz/integration-guide>  
+> **在线演示**：<http://114.215.209.144:8088/integration-guide>  
 > **开源仓库**：<https://github.com/kkangtai9607/agentShield>  
 > 本文说明如何将 AgentShield 接入 **Cursor、Claude、Trae、Codex（OpenAI）** 等主流 Agent 的 **Tool Calling / MCP** 流程。
 
@@ -122,7 +122,7 @@ Trae 支持 MCP stdio，配置项与 Cursor 相同：指定 `python -m app.agent
 ### 4.1 获取 Token
 
 ```bash
-ORIGIN=https://agentshieldtop.xyz
+ORIGIN=http://114.215.209.144:8088
 
 TOKEN=$(curl -s -X POST "$ORIGIN/api/auth/login" \
   -H 'Content-Type: application/json' \
@@ -151,7 +151,7 @@ curl -s -X POST "$ORIGIN/api/shield/evaluate" \
 ```python
 from app.integration.sdk import ShieldClient
 
-shield = ShieldClient("https://agentshieldtop.xyz", token=TOKEN)
+shield = ShieldClient("http://114.215.209.144:8088", token=TOKEN)
 
 # LLM 返回 tool_call 之后：
 res = shield.evaluate(
@@ -261,6 +261,6 @@ def my_db_query(sql: str):
 
 - 通用集成：[INTEGRATION.md](./INTEGRATION.md)
 - 源码：<https://github.com/kkangtai9607/agentShield>
-- 线上演示：<https://agentshieldtop.xyz>
+- 线上演示：<http://114.215.209.144:8088>
 - MCP 实现：`backend/app/agents/mcp_server.py`
 - LangChain 工具：`backend/app/agents/langchain_tools.py`

@@ -29,4 +29,4 @@ rsync -avz --delete \
 echo "==> 远程部署"
 ssh "${TARGET}" "cd ${APP_ROOT} && sudo bash deploy/deploy.sh"
 
-echo "完成: https://agentshieldtop.xyz"
+echo "完成: http://114.215.209.144:8088"

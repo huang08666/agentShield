@@ -1,7 +1,8 @@
-# AgentShield 阿里云上线指南（agentshieldtop.xyz）
+# AgentShield 阿里云上线指南
 
-> 适用：**2核2G 轻量服务器**，且**已有其他业务**在跑。  
-> 方案：AgentShield 独占域名 `agentshieldtop.xyz`，后端监听 **127.0.0.1:8001**（不占用 80/443），与现有站点 **nginx 多 server_name 并存**。
+> **当前线上演示（备案前）**：<http://114.215.209.144:8088> → 见 [IP-PORT-ACCESS.md](./IP-PORT-ACCESS.md)  
+> **域名方案（备案后）**：`agentshieldtop.xyz` → 见下文第二～八节  
+> 适用：**2核2G 轻量服务器**，与现有业务 nginx 多站点共存；后端 **127.0.0.1:8001**。
 
 ---
 
@@ -177,11 +178,29 @@ sudo nginx -t && sudo systemctl reload nginx
 ### 8.2 申请 Let's Encrypt 免费证书
 
 ```bash
-sudo mkdir -p /var/www/certbot
-sudo certbot --nginx -d agentshieldtop.xyz -d www.agentshieldtop.xyz
+sudo mkdir -p /var/www/certbot/.well-known/acme-challenge
+sudo chmod -R 755 /var/www/certbot
+
+# 推荐 webroot 方式（与 nginx 配置一致，避免 --nginx 插件 403）
+sudo certbot certonly --webroot -w /var/www/certbot \
+  -d agentshieldtop.xyz -d www.agentshieldtop.xyz
+
+# 证书就绪后重新部署以启用 HTTPS 配置
+sudo bash deploy/deploy.sh
 ```
 
-按提示输入邮箱。成功后 certbot 会自动改 nginx 配置。
+若仍失败，先自测验证路径（应 200，不能 403/404）：
+
+```bash
+echo test > /var/www/certbot/.well-known/acme-challenge/ping
+curl -I http://agentshieldtop.xyz/.well-known/acme-challenge/ping
+```
+
+也可用 `certbot --nginx`（需 nginx 已 reload 最新 acme 配置）：
+
+```bash
+sudo certbot --nginx -d agentshieldtop.xyz -d www.agentshieldtop.xyz
+```
 
 ### 8.3 切换到完整 HTTPS 配置（可选优化）
 
@@ -248,8 +267,8 @@ sudo certbot renew --dry-run
 
 ## 十二、答辩 / 用户访问话术
 
-> 演示地址：**https://agentshieldtop.xyz**  
-> 评委无需安装，浏览器登录即可体验；集成 API 为同源 `POST /api/shield/evaluate`。
+> 演示地址：**http://114.215.209.144:8088**  
+> 评委无需安装，浏览器登录即可体验；集成 API：`POST http://114.215.209.144:8088/api/shield/evaluate`。
 
 ---
 

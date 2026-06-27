@@ -1,0 +1,10 @@
+AgentShield Project Links
+=========================
+
+Work name: AgentShield - Security Gateway for LLM Agent Tool Calling
+
+Online demo:     http://114.215.209.144:8088
+Open source:     https://github.com/kkangtai9607/agentShield
+Integration:     INTEGRATION.md, INTEGRATION-AGENTS.md (in source package)
+Threat model:    THREAT_MODEL.md
+Deploy guide:    deploy/IP-PORT-ACCESS.md, deploy/DEPLOY.md
